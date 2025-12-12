@@ -1,0 +1,46 @@
+---> filling null values, we will use two methods,
+ 
+1) random sampling for higher null values and 
+2) mean/mode sampling for lower null values
+
+def random_value_imputation(feature):
+    random_sample = df[feature].dropna().sample(df[feature].isna().sum())
+    random_sample.index = df[df[feature].isnull()].index
+    df.loc[df[feature].isnull(), feature] = random_sample
+    
+def impute_mode(feature):
+    mode = df[feature].mode()[0]
+    df[feature] = df[feature].fillna(mode)
+
+
+Explanation:
+
+The provided code defines two methods for filling missing values in a DataFrame:
+
+1. Random Sampling Imputation (random_value_imputation):-
+This method replaces missing values with randomly selected values from the same column. 
+Here's how it works:
+
+df[feature].dropna() → Drops missing values from the column.
+
+.sample(df[feature].isna().sum()) → Randomly selects as many values as there are missing values.
+
+df.loc -> The selected random values are then assigned back to the missing positions using.
+
+🔹 Use case: Best for large missing values to preserve the original data distribution.
+
+2. Mode Imputation (impute_mode)
+This method fills missing values with the most frequently occurring value (mode) in the column.
+
+df[feature].mode()[0] → Finds the most common value.
+df[feature].fillna(mode) → Fills missing values with this mode.
+
+🔹 Use case: Best for categorical variables or columns with few missing values.
+
+---> We have used label encoding to label the categorical data in 0 and 1 form.
+
+---> WE have used below ML mdoels:
+1) KNN
+2) Decision Tree classifire
+
+---> We have also used hyper parameter tuning GridSearchCV (Optimization Method)
